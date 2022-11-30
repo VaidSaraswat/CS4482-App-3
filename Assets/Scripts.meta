@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: d232f8c7a20140a4ea6580fb5714fadb
+=======
+guid: e4f1a5195dc8044dda8e69fa6537c7c6
+>>>>>>> 854ea24 (Enemy setup part 1)
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
