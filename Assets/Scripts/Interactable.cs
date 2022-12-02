@@ -12,7 +12,7 @@ public class Interactable : MonoBehaviour
     {
         //This is going to be overriden depending on the interactable
 
-        Debug.Log("Interacting with " + transform.name);
+        // Debug.Log("Interacting with " + transform.name);
 
     }
     void Update()
