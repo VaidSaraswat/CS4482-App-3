@@ -42,6 +42,18 @@ public class LobbyMenu : NetworkBehaviour
         }
         PlayerCountText.text = "Players: " + m_PlayerCount.Value;
     }
+
+    public override void OnDestroy()
+    {
+        if(NetworkManager.Singleton.IsServer)
+        {
+            NetworkManager.Singleton.OnClientDisconnectCallback -= RemovePlayerName;
+        }
+        else
+        {
+            NetworkManager.Singleton.OnClientDisconnectCallback -= ServerTerminate;
+        }
+    }
     
     public void LeaveLobby()
     {

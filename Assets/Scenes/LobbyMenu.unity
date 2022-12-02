@@ -181,25 +181,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Eustace
-
-    Edward
-
-    Vaid
-
-    Test
-
-    Test
-
-    Page2
-
-    Page2
-
-    Page2
-
-    Page2
-
-    Page2'
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 12c2920a0fbbaad41a306489c701b3d3, type: 2}
   m_sharedMaterial: {fileID: -595149480017736936, guid: 12c2920a0fbbaad41a306489c701b3d3, type: 2}
