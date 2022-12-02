@@ -15,6 +15,7 @@ public class Inventory : MonoBehaviour
     
     private bool canOpen = false;
     private bool isOpen = false;
+    private Item itemUsed;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +25,8 @@ public class Inventory : MonoBehaviour
             slot[i] = slotHolder.transform.GetChild(i).gameObject;
             slot[i].GetComponent<Slot>().setEmpty(true);
         }
+
+         itemUsed = GameObject.Find("Item").GetComponent<Item>();
     }
 
     
@@ -32,7 +35,7 @@ public class Inventory : MonoBehaviour
     void Update()
     {
         if(Input.GetKeyDown("1") && !slot[0].GetComponent<Slot>().isEmpty()){
-            Item itemUsed = slot[0].GetComponent<Item>();
+            
             itemUsed.useItem(slot[0].GetComponent<Slot>().getItem());
             slot[0].GetComponent<Slot>().setItem(null);
             slot[0].GetComponent<Slot>().setEmpty(true);
@@ -40,7 +43,7 @@ public class Inventory : MonoBehaviour
         }
         
         if(Input.GetKeyDown("2") && !slot[1].GetComponent<Slot>().isEmpty()){
-            Item itemUsed = slot[1].GetComponent<Item>();
+            
             itemUsed.useItem(slot[1].GetComponent<Slot>().getItem());
             slot[1].GetComponent<Slot>().setItem(null);
             slot[1].GetComponent<Slot>().setEmpty(true);
@@ -48,7 +51,7 @@ public class Inventory : MonoBehaviour
         }
 
         if(Input.GetKeyDown("3") && !slot[2].GetComponent<Slot>().isEmpty()){
-            Item itemUsed = slot[2].GetComponent<Item>();
+            
             itemUsed.useItem(slot[2].GetComponent<Slot>().getItem());
             slot[2].GetComponent<Slot>().setItem(null);
             slot[2].GetComponent<Slot>().setEmpty(true);
@@ -56,7 +59,7 @@ public class Inventory : MonoBehaviour
         }
 
         if(Input.GetKeyDown("4") && !slot[3].GetComponent<Slot>().isEmpty()){
-            Item itemUsed = slot[3].GetComponent<Item>();
+            
             itemUsed.useItem(slot[3].GetComponent<Slot>().getItem());
             slot[3].GetComponent<Slot>().setItem(null);
             slot[3].GetComponent<Slot>().setEmpty(true);
