@@ -8,7 +8,7 @@ public class PlayerIcon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        this.transform.position= (Vector3.Scale(player.transform.position, new Vector3(1,0,1))) + new Vector3(0,100,0);
+        this.transform.position= (Vector3.Scale(player.transform.position, new Vector3(1,0,1))) + new Vector3(0,200,0);
 
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using StarterAssets;
+
 using TMPro;
 
 public class Inventory : MonoBehaviour
@@ -12,13 +13,19 @@ public class Inventory : MonoBehaviour
     public GameObject shop;
     public StarterAssetsInputs _input;
     public TMP_Text prompt;
-    
+    public TMP_Text pointDisplay;
+    private int gold;
+    private int points;
     private bool canOpen = false;
     private bool isOpen = false;
+    
+    
     private Item itemUsed;
     // Start is called before the first frame update
     void Start()
     {
+        gold=0;
+        points =0;
         slots = 4;
         slot = new GameObject[slots];
         for(int i=0; i<slots; i++){
@@ -87,6 +94,8 @@ public class Inventory : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             isOpen=false;
         }
+
+        
     }
 
     public void addItem(string itemName, Sprite icon){
@@ -105,6 +114,12 @@ public class Inventory : MonoBehaviour
         if(other.gameObject.layer == LayerMask.NameToLayer("shop")){
             prompt.gameObject.SetActive(true);
             canOpen = true;
+        }
+
+        if(other.gameObject.layer ==LayerMask.NameToLayer("points")){
+            points++;
+            other.gameObject.GetComponent<Collectible>().pickedUp();
+            pointDisplay.SetText(string.Format("{0}", points));
         }
     }
 
