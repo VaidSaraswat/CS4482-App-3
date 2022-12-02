@@ -13,14 +13,14 @@ public class MainMenu : MonoBehaviour
 
     public void HostGame()
     {
-        PlayerPrefs.SetString("PlayerName", hostNameInputField.text);
+        PlayerPrefs.SetString("PlayerName", hostNameInputField.text.Length == 0 ? "Host" : hostNameInputField.text);
         NetworkManager.Singleton.StartHost();
         NetworkManager.Singleton.SceneManager.LoadScene(lobbyScene, LoadSceneMode.Single);
     }
 
     public void JoinGame()
     {
-        PlayerPrefs.SetString("PlayerName", clientNameInputField.text);
+        PlayerPrefs.SetString("PlayerName", clientNameInputField.text.Length == 0 ? "Default User" : clientNameInputField.text);
         NetworkManager.Singleton.StartClient();
     }    
 
