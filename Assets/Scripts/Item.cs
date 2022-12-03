@@ -8,38 +8,107 @@ public class Item : MonoBehaviour
 
     public GameObject minimap;
     public GameObject player;
+    public GameObject teleporter;
     private float minimapTime;
+    private float minimapCooldown;
+    private bool minimapAvailable;
     private float superspeedTime;
-
+    private float superspeedCooldown;
+    private bool superspeedAvailable;
+    private float teleporterCooldown;
+    private bool teleporterAvailable;
+    private bool teleporterPlaced;
 
 
     public void useItem(string itemUsed)
     {
         switch(itemUsed){
-
             case "Eye In The Sky":
-                minimap.SetActive(true);
-                minimapTime =0f;
+                if(minimapAvailable){
+                    minimap.SetActive(true);
+                    minimapTime =0f;
+                    minimapAvailable = false;
+                    minimapCooldown = 20f;
+                }
                 break;
             case "Super Speed":
-                player.GetComponent<ThirdPersonController>().MoveSpeed = 100f;
-                superspeedTime =0f;
+                if(superspeedAvailable){
+                    player.GetComponent<ThirdPersonController>().MoveSpeed = 50f;
+                    superspeedTime =0f;
+                    superspeedAvailable = false;
+                    superspeedCooldown = 15f;
+                }
                 break;
-
-
+            case "Teleporter":
+                if(teleporterAvailable){
+                    if(teleporterPlaced){
+                        Destroy(GameObject.Find("TeleporterDevice(Clone)"));
+                    }
+                    Instantiate(teleporter, (player.transform.position + new Vector3(0,7,0)), Quaternion.identity);
+                    teleporterAvailable = false;
+                    teleporterCooldown = 30f;
+                    teleporterPlaced = true;
+                }
+                break;
         }
     
     }
+    void start(){
+        minimapAvailable = true;
+        superspeedAvailable = true;
+        teleporterAvailable = true;
+        teleporterPlaced = false;
+    }
+
     void Update(){
         minimapTime += Time.deltaTime;
         superspeedTime += Time.deltaTime;
-        if(minimapTime > 5){
+
+        if(minimapTime > 7){
             minimap.SetActive(false);
         }
-        if(superspeedTime > 5){
-           player.GetComponent<ThirdPersonController>().MoveSpeed = 15f;
+        if(!minimapAvailable){
+            minimapCooldown -= Time.deltaTime;
+        }
+        if(minimapCooldown <= 0){
+            minimapAvailable= true;
         }
 
+        if(superspeedTime > 7){
+           player.GetComponent<ThirdPersonController>().MoveSpeed = 15f;
+        }
+        if(!superspeedAvailable){
+            superspeedCooldown -= Time.deltaTime;
+        }
+        if(superspeedCooldown <=0){
+            superspeedAvailable = true;
+        }
 
+        if(!teleporterAvailable){
+            teleporterCooldown -= Time.deltaTime;
+        }
+        if(teleporterCooldown <=0){
+            teleporterAvailable = true;
+        }
+    }
+
+    public int getCooldown(string itemUsed){
+        switch(itemUsed){
+            case "Eye In The Sky":
+                return (int)minimapCooldown;
+                break;
+            case "Super Speed":
+                return (int)superspeedCooldown;
+                break;
+            case "Teleporter":
+                return (int)teleporterCooldown;
+                break;
+            default:
+                return 0;
+        }
+    }
+
+    public bool isTelePlaced(){
+        return teleporterPlaced;
     }
 }

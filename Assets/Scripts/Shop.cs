@@ -13,6 +13,7 @@ public class Shop : MonoBehaviour
     public TMP_Text displayDescription;
     public TMP_Text displayItem;
     public TMP_Text displayCost;
+    public TMP_Text displayPoints;
     public GameObject displayImage;
     public GameObject shop;
     private GameObject player;
@@ -25,13 +26,14 @@ public class Shop : MonoBehaviour
     }
 
     void Update(){
-        
+        string points= player.GetComponent<Inventory>().getPoints().ToString();
+        displayPoints.SetText(points);
     }
 
     public void selectTeleporter(){
         item = "Teleporter";
-        description = "When this item is used, the player will place this item at their current location. The player can then teleport to the location where the item was dropped by using the item again";
-        cost = 100;
+        description = "When this item is used, the player will place this item at their current location. The player can then teleport to the location where the item was dropped by using pressing 'T'.(30 second cooldown after being placed)";
+        cost = 75;
         displayDescription.SetText(description);
         displayCost.SetText(string.Format("{0}", cost));
         displayItem.SetText(item);
@@ -41,8 +43,8 @@ public class Shop : MonoBehaviour
 
     public void selectSuperSpeed(){
         item = "Super Speed";
-        description = "Grants the user greatly increased movement speed for 7 seconds";
-        cost = 120;
+        description = "Grants the user greatly increased movement speed for 7 seconds (15 second cooldown)";
+        cost = 50;
         displayDescription.SetText(description);
         displayCost.SetText(string.Format("{0}", cost));
         displayItem.SetText(item);
@@ -52,8 +54,8 @@ public class Shop : MonoBehaviour
 
     public void selectEye(){
         item = "Eye In The Sky";
-        description = "Provides user with a top down view of the maze located at the top right of the screen for 7 seconds";
-        cost = 150;
+        description = "Provides user with a top down view of the maze located at the top right of the screen for 5 seconds (20 second cooldown)";
+        cost = 100;
         displayDescription.SetText(description);
         displayCost.SetText(string.Format("{0}", cost));
         displayItem.SetText(item);
@@ -62,7 +64,10 @@ public class Shop : MonoBehaviour
     }
 
     public void buyItem(){
+        if(player.GetComponent<Inventory>().getPoints() >= cost && !player.GetComponent<Inventory>().isFull()){
         player.GetComponent<Inventory>().addItem(item,displayImage.GetComponent<Image>().sprite );
+        player.GetComponent<Inventory>().removePoints(cost);
+        }
     }
 
     

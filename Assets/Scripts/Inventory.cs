@@ -14,7 +14,6 @@ public class Inventory : MonoBehaviour
     public StarterAssetsInputs _input;
     public TMP_Text prompt;
     public TMP_Text pointDisplay;
-    private int gold;
     private int points;
     private bool canOpen = false;
     private bool isOpen = false;
@@ -24,7 +23,6 @@ public class Inventory : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gold=0;
         points =0;
         slots = 4;
         slot = new GameObject[slots];
@@ -41,36 +39,38 @@ public class Inventory : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        pointDisplay.SetText(string.Format("{0}", points));
+        
         if(Input.GetKeyDown("1") && !slot[0].GetComponent<Slot>().isEmpty()){
             
             itemUsed.useItem(slot[0].GetComponent<Slot>().getItem());
-            slot[0].GetComponent<Slot>().setItem(null);
-            slot[0].GetComponent<Slot>().setEmpty(true);
-            slot[0].GetComponent<Slot>().setIcon(null);
+            // slot[0].GetComponent<Slot>().setItem(null);
+            // slot[0].GetComponent<Slot>().setEmpty(true);
+            // slot[0].GetComponent<Slot>().setIcon(null);
         }
         
         if(Input.GetKeyDown("2") && !slot[1].GetComponent<Slot>().isEmpty()){
             
             itemUsed.useItem(slot[1].GetComponent<Slot>().getItem());
-            slot[1].GetComponent<Slot>().setItem(null);
-            slot[1].GetComponent<Slot>().setEmpty(true);
-            slot[1].GetComponent<Slot>().setIcon(null);
+            // slot[1].GetComponent<Slot>().setItem(null);
+            // slot[1].GetComponent<Slot>().setEmpty(true);
+            // slot[1].GetComponent<Slot>().setIcon(null);
         }
 
         if(Input.GetKeyDown("3") && !slot[2].GetComponent<Slot>().isEmpty()){
             
             itemUsed.useItem(slot[2].GetComponent<Slot>().getItem());
-            slot[2].GetComponent<Slot>().setItem(null);
-            slot[2].GetComponent<Slot>().setEmpty(true);
-            slot[2].GetComponent<Slot>().setIcon(null);
+            // slot[2].GetComponent<Slot>().setItem(null);
+            // slot[2].GetComponent<Slot>().setEmpty(true);
+            // slot[2].GetComponent<Slot>().setIcon(null);
         }
 
         if(Input.GetKeyDown("4") && !slot[3].GetComponent<Slot>().isEmpty()){
             
             itemUsed.useItem(slot[3].GetComponent<Slot>().getItem());
-            slot[3].GetComponent<Slot>().setItem(null);
-            slot[3].GetComponent<Slot>().setEmpty(true);
-            slot[3].GetComponent<Slot>().setIcon(null);
+            // slot[3].GetComponent<Slot>().setItem(null);
+            // slot[3].GetComponent<Slot>().setEmpty(true);
+            // slot[3].GetComponent<Slot>().setIcon(null);
         }
 
         if(Input.GetKeyDown("p") && canOpen){
@@ -95,6 +95,15 @@ public class Inventory : MonoBehaviour
             isOpen=false;
         }
 
+        if(Input.GetKeyDown("b")){
+            GameObject.Find("Player").transform.position = new Vector3(524,2,208);
+        }
+
+        if(Input.GetKeyDown("t") && itemUsed.isTelePlaced()){
+            GameObject.Find("Player").transform.position = GameObject.Find("TeleporterDevice(Clone)").transform.position - new Vector3(0,5,0);
+            Destroy(GameObject.Find("TeleporterDevice(Clone)"));
+        }
+
         
     }
 
@@ -117,9 +126,9 @@ public class Inventory : MonoBehaviour
         }
 
         if(other.gameObject.layer ==LayerMask.NameToLayer("points")){
-            points++;
+            points+= 5;
             other.gameObject.GetComponent<Collectible>().pickedUp();
-            pointDisplay.SetText(string.Format("{0}", points));
+            
         }
     }
 
@@ -128,5 +137,21 @@ public class Inventory : MonoBehaviour
             prompt.gameObject.SetActive(false);
             canOpen = false;
         }
+    }
+
+    public int getPoints(){
+        return points;
+    }
+     public void removePoints(int cost){
+         points -= cost;
+    }
+    public bool isFull(){
+        bool full = true;
+        for(int i = 0; i<4; i++){
+            if(slot[i].GetComponent<Slot>().isEmpty()){
+                full = false;
+            }
+        }
+        return full;
     }
 }
