@@ -17,17 +17,22 @@ public class Shop : MonoBehaviour
     public GameObject displayImage;
     public GameObject shop;
     private GameObject player;
-
-
     
     void Start()
     {
-        player = GameObject.Find("Player");
+        player = GameObject.Find("GameManager").GetComponent<GameManager>().GetPlayer();
     }
 
     void Update(){
-        string points= player.GetComponent<Inventory>().getPoints().ToString();
-        displayPoints.SetText(points);
+        if(player == null)
+        {
+            player = GameObject.Find("GameManager").GetComponent<GameManager>().GetPlayer();
+        }
+        else
+        {
+            string points= player.GetComponent<Inventory>().getPoints().ToString();
+            displayPoints.SetText(points);
+        }   
     }
 
     public void selectTeleporter(){

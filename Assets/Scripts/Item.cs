@@ -7,8 +7,8 @@ public class Item : MonoBehaviour
 {
 
     public GameObject minimap;
-    public GameObject player;
     public GameObject teleporter;
+    private GameObject player;
     private float minimapTime;
     private float minimapCooldown;
     private bool minimapAvailable;
@@ -53,7 +53,9 @@ public class Item : MonoBehaviour
         }
     
     }
-    void start(){
+    void Start(){
+        player = GameObject.Find("GameManager").GetComponent<GameManager>().GetPlayer();
+
         minimapAvailable = true;
         superspeedAvailable = true;
         teleporterAvailable = true;
@@ -61,6 +63,11 @@ public class Item : MonoBehaviour
     }
 
     void Update(){
+        if(player == null)
+        {
+            player = GameObject.Find("GameManager").GetComponent<GameManager>().GetPlayer();
+        }
+
         minimapTime += Time.deltaTime;
         superspeedTime += Time.deltaTime;
 
@@ -96,13 +103,10 @@ public class Item : MonoBehaviour
         switch(itemUsed){
             case "Eye In The Sky":
                 return (int)minimapCooldown;
-                break;
             case "Super Speed":
                 return (int)superspeedCooldown;
-                break;
             case "Teleporter":
                 return (int)teleporterCooldown;
-                break;
             default:
                 return 0;
         }

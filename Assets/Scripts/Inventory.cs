@@ -44,33 +44,21 @@ public class Inventory : MonoBehaviour
         if(Input.GetKeyDown("1") && !slot[0].GetComponent<Slot>().isEmpty()){
             
             itemUsed.useItem(slot[0].GetComponent<Slot>().getItem());
-            // slot[0].GetComponent<Slot>().setItem(null);
-            // slot[0].GetComponent<Slot>().setEmpty(true);
-            // slot[0].GetComponent<Slot>().setIcon(null);
         }
         
         if(Input.GetKeyDown("2") && !slot[1].GetComponent<Slot>().isEmpty()){
             
             itemUsed.useItem(slot[1].GetComponent<Slot>().getItem());
-            // slot[1].GetComponent<Slot>().setItem(null);
-            // slot[1].GetComponent<Slot>().setEmpty(true);
-            // slot[1].GetComponent<Slot>().setIcon(null);
         }
 
         if(Input.GetKeyDown("3") && !slot[2].GetComponent<Slot>().isEmpty()){
             
             itemUsed.useItem(slot[2].GetComponent<Slot>().getItem());
-            // slot[2].GetComponent<Slot>().setItem(null);
-            // slot[2].GetComponent<Slot>().setEmpty(true);
-            // slot[2].GetComponent<Slot>().setIcon(null);
         }
 
         if(Input.GetKeyDown("4") && !slot[3].GetComponent<Slot>().isEmpty()){
             
             itemUsed.useItem(slot[3].GetComponent<Slot>().getItem());
-            // slot[3].GetComponent<Slot>().setItem(null);
-            // slot[3].GetComponent<Slot>().setEmpty(true);
-            // slot[3].GetComponent<Slot>().setIcon(null);
         }
 
         if(Input.GetKeyDown("p") && canOpen){
@@ -96,11 +84,11 @@ public class Inventory : MonoBehaviour
         }
 
         if(Input.GetKeyDown("b")){
-            GameObject.Find("Player").transform.position = new Vector3(524,2,208);
+            GameObject.Find("GameManager").GetComponent<GameManager>().GetPlayer().transform.position = new Vector3(524,2,208);
         }
 
         if(Input.GetKeyDown("t") && itemUsed.isTelePlaced()){
-            GameObject.Find("Player").transform.position = GameObject.Find("TeleporterDevice(Clone)").transform.position - new Vector3(0,5,0);
+            GameObject.Find("GameManager").GetComponent<GameManager>().GetPlayer().transform.position = GameObject.Find("TeleporterDevice(Clone)").transform.position - new Vector3(0,5,0);
             Destroy(GameObject.Find("TeleporterDevice(Clone)"));
         }
 
@@ -126,7 +114,7 @@ public class Inventory : MonoBehaviour
         }
 
         if(other.gameObject.layer ==LayerMask.NameToLayer("points")){
-            points+= 5;
+            points+= 500;
             other.gameObject.GetComponent<Collectible>().pickedUp();
             
         }
