@@ -25,7 +25,17 @@ public class MainMenu : MonoBehaviour
         PlayerPrefs.SetString("PlayerName", clientNameInputField.text.Length == 0 ? "Default User" : clientNameInputField.text);
         var transport = NetworkManager.Singleton.GetComponent<UnityTransport>().ConnectionData.Address = hostIPAddressInputField.text;
         NetworkManager.Singleton.StartClient();
+        StartCoroutine(waiter());
     }    
+
+    IEnumerator waiter()
+    {
+        yield return new WaitForSeconds(0.5f);
+        if(NetworkManager.Singleton.IsConnectedClient == false)
+        {
+            NetworkManager.Singleton.Shutdown();
+        }
+    }
 
     public void ExitGame()
     {
