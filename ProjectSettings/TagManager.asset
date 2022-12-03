@@ -12,9 +12,15 @@ TagManager:
   - 
   - Water
   - UI
+<<<<<<< HEAD
   - player
   - shop
   - points
+=======
+  - 
+  - 
+  - Ground
+>>>>>>> 854ea24 (Enemy setup part 1)
   - 
   - 
   - 
