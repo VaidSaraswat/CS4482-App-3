@@ -3,8 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - CinemachineTarget
+  tags: []
   layers:
   - Default
   - TransparentFX
@@ -12,15 +11,9 @@ TagManager:
   - 
   - Water
   - UI
-<<<<<<< HEAD
-  - player
-  - shop
-  - points
-=======
   - 
   - 
-  - Ground
->>>>>>> 854ea24 (Enemy setup part 1)
+  - 
   - 
   - 
   - 
