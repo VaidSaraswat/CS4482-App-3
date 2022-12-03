@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using TMPro;
 
 public class MainMenu : MonoBehaviour
@@ -10,6 +11,7 @@ public class MainMenu : MonoBehaviour
     public string lobbyScene;
     public TMP_InputField hostNameInputField;
     public TMP_InputField clientNameInputField;
+    public TMP_InputField hostIPAddressInputField;
 
     public void HostGame()
     {
@@ -21,6 +23,7 @@ public class MainMenu : MonoBehaviour
     public void JoinGame()
     {
         PlayerPrefs.SetString("PlayerName", clientNameInputField.text.Length == 0 ? "Default User" : clientNameInputField.text);
+        var transport = NetworkManager.Singleton.GetComponent<UnityTransport>().ConnectionData.Address = hostIPAddressInputField.text;
         NetworkManager.Singleton.StartClient();
     }    
 
