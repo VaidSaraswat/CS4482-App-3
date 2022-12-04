@@ -2,25 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.SceneManagement;
+
 
 public class Challenger : MonoBehaviour
 {
     public TMP_Text challengeText;
     private bool canChallenge;
-  
+
     void Update()
     {
-        if(Input.GetKeyDown("c") && canChallenge){
-            GameObject[] allObjects = FindObjectsOfType<GameObject>();
-            bool [] states = new bool[allObjects.Length];
-            for(int i =0; i<allObjects.Length; i++)
-            {
-                states[i] =allObjects[i].activeSelf;
-                allObjects[i].SetActive(false);
-            }
-            SceneManager.LoadScene("FightScene", LoadSceneMode.Additive);
-        }
+        triggerCombat();
     }
 
     void OnTriggerStay(Collider other){
@@ -36,4 +27,13 @@ public class Challenger : MonoBehaviour
             canChallenge = false;
         }
     }
+
+    public void triggerCombat(){
+        if(Input.GetKeyDown("c") && canChallenge){
+            GameObject.Find("GameManager").GetComponent<GameManager>().sendToCombat();
+        }
+
+    }
+
+    
 }

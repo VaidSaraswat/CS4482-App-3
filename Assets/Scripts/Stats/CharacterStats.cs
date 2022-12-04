@@ -34,7 +34,12 @@ public class CharacterStats : MonoBehaviour
     public virtual void Die()
     {
         //Die in some way, this method is meant to be overriden
+        bool win = false;
         Debug.Log(transform.name + " died!");
+        if(transform.name == "Enemy"){
+            win = true;
+        }
+        GameObject.Find("GameManager").GetComponent<GameManager>().returnfromCombat(win);
     }
 
 
