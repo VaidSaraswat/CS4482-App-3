@@ -316,7 +316,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4416926081852918481, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
       propertyPath: m_TagString
-      value: main
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 4416926081852918490, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
       propertyPath: MoveSpeed
@@ -534,6 +534,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ba790f99d6ac7a4581f35b0e415c29f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Position:
+    m_InternalValue: {x: 0, y: 0, z: 0}
+  playerId:
+    m_InternalValue: 0
 --- !u!4 &1821248971974436489 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3893294197879345259, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}

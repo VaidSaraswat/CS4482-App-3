@@ -24,6 +24,7 @@ public class GameManager : NetworkBehaviour
     private bool [] canvasStates;
     private GameObject camera;
     private GameObject canvas;
+    private GameObject player;
 
     private Dictionary<ulong, PlayerData> m_PlayerData = new Dictionary<ulong, PlayerData>();
     private Dictionary<ulong, GameObject> m_Players = new Dictionary<ulong, GameObject>();
@@ -32,6 +33,7 @@ public class GameManager : NetworkBehaviour
     {
         camera = GameObject.Find("Main Camera");
         canvas = GameObject.Find("Canvas");
+        
         m_PlayerData[NetworkManager.Singleton.LocalClientId] = new PlayerData(PlayerPrefs.GetString("PlayerName", "Default User"), 0);
         SpawnPlayerServerRpc(NetworkManager.Singleton.LocalClientId);
     }
@@ -43,8 +45,10 @@ public class GameManager : NetworkBehaviour
     }
 
     public void sendToCombat(){
+        player = GameObject.FindWithTag("Player");
         camera.SetActive(false);
-        
+        player.SetActive(false);
+
         canvasStates = new bool[canvas.transform.childCount];
         for(int i = 0; i < canvas.transform.childCount; i++){
             canvasStates[i] = canvas.transform.GetChild(i).gameObject.activeSelf;
@@ -75,13 +79,16 @@ public class GameManager : NetworkBehaviour
                 }  
             }
         }
-
         for(int i =0; i<canvasStates.Length; i++)
         {
             canvas.transform.GetChild(i).gameObject.SetActive(canvasStates[i]);
         }
-        
+        player.SetActive(true);
         camera.SetActive(true); 
+
+        if(win){
+            player.GetComponent<Inventory>().addPoints(50);
+        }
     }
 
     public GameObject GetPlayer()

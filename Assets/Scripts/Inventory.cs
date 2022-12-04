@@ -133,6 +133,9 @@ public class Inventory : MonoBehaviour
      public void removePoints(int cost){
          points -= cost;
     }
+    public void addPoints(int add){
+        points += add;
+    }
     public bool isFull(){
         bool full = true;
         for(int i = 0; i<4; i++){
