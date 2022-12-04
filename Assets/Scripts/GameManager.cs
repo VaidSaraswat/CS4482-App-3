@@ -11,6 +11,7 @@ public class GameManager : NetworkBehaviour
 {
     public GameObject PlayerPrefab;
     public GameObject VirtualCamera;
+    public GameObject CurrentPlayer;
 
     //Inventory Variables
     public GameObject slotHolder;
@@ -93,7 +94,11 @@ public class GameManager : NetworkBehaviour
 
     public GameObject GetPlayer()
     {
-        return NetworkManager.LocalClient.PlayerObject.gameObject;
+        if(CurrentPlayer != null)
+        {
+            return CurrentPlayer;
+        }
+        return null;
     }
 
     [ServerRpc(RequireOwnership=false)]
@@ -101,22 +106,34 @@ public class GameManager : NetworkBehaviour
         m_Players[clientId] = Instantiate(PlayerPrefab);
         m_Players[clientId].GetComponent<MovementManager>().playerId.Value = clientId;
         m_Players[clientId].GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
-        SetupLocalPlayerClientRpc(new ClientRpcParams {
+        SetupLocalPlayerClientRpc(new NetworkObjectReference(m_Players[clientId].GetComponent<NetworkObject>()), new ClientRpcParams {
                 Send = new ClientRpcSendParams
                 {
                     TargetClientIds = new ulong[] { clientId }
                 }
             });
+        UpdateMovementManagerPlayerIdsServerRpc();
     }
 
     [ClientRpc]
-    public void SetupLocalPlayerClientRpc(ClientRpcParams clientRpcParams) {
-        GameObject player = NetworkManager.LocalClient.PlayerObject.gameObject;
-        VirtualCamera.GetComponent<CinemachineVirtualCamera>().Follow = player.transform.GetChild(0).transform;
-        player.GetComponent<Inventory>().slotHolder = slotHolder;
-        player.GetComponent<Inventory>().shop = shop;
-        player.GetComponent<Inventory>().prompt = prompt;
-        player.GetComponent<Inventory>().pointDisplay = pointDisplay;
+    public void SetupLocalPlayerClientRpc(NetworkObjectReference currentPlayerRef, ClientRpcParams clientRpcParams) {
+        StartCoroutine(SetupLocalPlayerCoroutine(currentPlayerRef));
+    }
+
+    IEnumerator SetupLocalPlayerCoroutine(NetworkObjectReference currentPlayerRef)
+    {
+        while(currentPlayerRef.TryGet(out NetworkObject i) == false)
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+        
+        currentPlayerRef.TryGet(out NetworkObject currentPlayerNetworkObject);
+        CurrentPlayer = currentPlayerNetworkObject.gameObject;
+        VirtualCamera.GetComponent<CinemachineVirtualCamera>().Follow = CurrentPlayer.transform.GetChild(0).transform;
+        CurrentPlayer.GetComponent<Inventory>().slotHolder = slotHolder;
+        CurrentPlayer.GetComponent<Inventory>().shop = shop;
+        CurrentPlayer.GetComponent<Inventory>().prompt = prompt;
+        CurrentPlayer.GetComponent<Inventory>().pointDisplay = pointDisplay;
     }
 
     [ServerRpc(RequireOwnership=false)]
@@ -133,6 +150,25 @@ public class GameManager : NetworkBehaviour
             m_PlayerData[clientId] = data;
         }
     }
+
+    [ServerRpc]
+    void UpdateMovementManagerPlayerIdsServerRpc()
+    {
+        foreach(ulong playerId in m_Players.Keys)
+        {
+            ulong[] list = RemovePlayerId(playerId);
+            m_Players[playerId].GetComponent<MovementManager>().playerIds.Clear();
+            foreach(ulong id in list)
+            {
+                m_Players[playerId].GetComponent<MovementManager>().playerIds.Add(id);
+            }
+        }
+    }
+
+    private ulong[] RemovePlayerId(ulong playerId)
+    {
+        return m_Players.Keys.Where(x => x != playerId).ToArray();
+    }
 }
 
 public struct PlayerData : INetworkSerializeByMemcpy
@@ -146,3 +182,5 @@ public struct PlayerData : INetworkSerializeByMemcpy
     public string Name;
     public int Score;
 }
+
+//add onclientdisconnect so things can delete their objects.

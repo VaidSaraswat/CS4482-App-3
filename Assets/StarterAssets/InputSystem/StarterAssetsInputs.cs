@@ -24,6 +24,7 @@ namespace StarterAssets
 		public void OnMove(InputValue value)
 		{
 			MoveInput(value.Get<Vector2>());
+			gameObject.GetComponent<MovementManager>().MoveInputServerRpc(value.Get<Vector2>());
 		}
 
 		public void OnLook(InputValue value)
@@ -31,17 +32,20 @@ namespace StarterAssets
 			if(cursorInputForLook)
 			{
 				LookInput(value.Get<Vector2>());
+				gameObject.GetComponent<MovementManager>().LookInputServerRpc(value.Get<Vector2>());
 			}
 		}
 
 		public void OnJump(InputValue value)
 		{
 			JumpInput(value.isPressed);
+			gameObject.GetComponent<MovementManager>().JumpInputServerRpc(value.isPressed);
 		}
 
 		public void OnSprint(InputValue value)
 		{
 			SprintInput(value.isPressed);
+			gameObject.GetComponent<MovementManager>().SprintInputServerRpc(value.isPressed);
 		}
 #endif
 
@@ -49,7 +53,7 @@ namespace StarterAssets
 		public void MoveInput(Vector2 newMoveDirection)
 		{
 			move = newMoveDirection;
-		} 
+		}
 
 		public void LookInput(Vector2 newLookDirection)
 		{

@@ -20,9 +20,19 @@ public class Inventory : MonoBehaviour
     
     
     private Item itemUsed;
-    // Start is called before the first frame update
+
     void Start()
     {
+        StartCoroutine(waiter());
+    }
+
+    IEnumerator waiter()
+    {
+        while(slotHolder == null)
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+        
         points =0;
         slots = 4;
         slot = new GameObject[slots];
@@ -31,12 +41,9 @@ public class Inventory : MonoBehaviour
             slot[i].GetComponent<Slot>().setEmpty(true);
         }
 
-         itemUsed = GameObject.Find("Item").GetComponent<Item>();
+        itemUsed = GameObject.Find("Item").GetComponent<Item>();
     }
 
-    
-
-    // Update is called once per frame
     void Update()
     {
         pointDisplay.SetText(string.Format("{0}", points));
