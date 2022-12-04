@@ -32706,6 +32706,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerPrefab: {fileID: 1300890373507562547, guid: 3f5818a46e517e24eaa649be5addd58b, type: 3}
   VirtualCamera: {fileID: 1942793127}
+  CurrentPlayer: {fileID: 0}
   slotHolder: {fileID: 1214018085}
   shop: {fileID: 396166961}
   prompt: {fileID: 9606153}
@@ -40020,7 +40021,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 2147483647
+    m_Bits: 503
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0

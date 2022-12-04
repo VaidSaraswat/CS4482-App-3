@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1266063913}
   - component: {fileID: 1266063912}
   - component: {fileID: 1266063911}
-  m_Layer: 6
+  m_Layer: 9
   m_Name: SphereIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -544,7 +544,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerId:
     m_InternalValue: 0
-  playerIds: 
   move: {x: 0, y: 0}
   look: {x: 0, y: 0}
   jump: 0
