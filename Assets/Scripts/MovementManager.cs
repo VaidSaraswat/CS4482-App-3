@@ -6,7 +6,6 @@ using Unity.Netcode;
 
 public class MovementManager : NetworkBehaviour
 {
-    //public NetworkVariable<Vector3> Position = new NetworkVariable<Vector3>();
     public NetworkVariable<ulong> playerId = new NetworkVariable<ulong>();
     public NetworkList<ulong> playerIds;
     private ulong[] playerIdList;
@@ -16,6 +15,7 @@ public class MovementManager : NetworkBehaviour
 	public Vector2 look;
 	public bool jump;
 	public bool sprint;
+    public float cameraAngle;
 
     void Awake()
     {
@@ -50,20 +50,22 @@ public class MovementManager : NetworkBehaviour
         }
     }
 
-    // void Update()
-    // {
-    //     UpdatePositionServerRpc(transform.position);
-    //     if(playerId.Value != NetworkManager.Singleton.LocalClientId)
-    //     {
-    //         transform.position = Position.Value;
-    //     }
-    // }
-    
-    // [ServerRpc(RequireOwnership=false)]
-    // void UpdatePositionServerRpc(Vector3 position)
-    // {
-    //     Position.Value = position;
-    // }
+    [ServerRpc(RequireOwnership=false)]
+	public void CameraAngleServerRpc(float newCameraAngle)
+    {
+        CameraAngleClientRpc(newCameraAngle, new ClientRpcParams {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = playerIdList
+            }
+        });
+    }
+
+    [ClientRpc]
+    void CameraAngleClientRpc(float newCameraAngle, ClientRpcParams clientRpcParams)
+    {
+        cameraAngle = newCameraAngle;
+    }
 
     [ServerRpc(RequireOwnership=false)]
 	public void MoveInputServerRpc(Vector2 newMoveDirection)
@@ -77,7 +79,6 @@ public class MovementManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    //also send camera input
     void MoveInputClientRpc(Vector2 newMoveDirection, ClientRpcParams clientRpcParams)
     {
         move = newMoveDirection;
@@ -133,4 +134,8 @@ public class MovementManager : NetworkBehaviour
     {
         sprint = newSprintState;
     }
+
+    //Change movement speed
+
+    //Change position
 }

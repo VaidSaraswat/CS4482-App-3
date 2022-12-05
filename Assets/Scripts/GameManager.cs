@@ -30,6 +30,14 @@ public class GameManager : NetworkBehaviour
     private Dictionary<ulong, PlayerData> m_PlayerData = new Dictionary<ulong, PlayerData>();
     private Dictionary<ulong, GameObject> m_Players = new Dictionary<ulong, GameObject>();
 
+    void Awake()
+    {
+        if(NetworkManager.Singleton.IsServer)
+        {
+            NetworkManager.Singleton.OnClientDisconnectCallback += RemovePlayer;
+        }
+    }
+
     void Start()
     {
         camera = GameObject.Find("Main Camera");
@@ -43,6 +51,22 @@ public class GameManager : NetworkBehaviour
     {
         //m_PlayerData[NetworkManager.Singleton.LocalClientId].Score = ...
         UpdatePlayerDataServerRpc(NetworkManager.Singleton.LocalClientId, m_PlayerData[NetworkManager.Singleton.LocalClientId]);
+    }
+
+    public override void OnDestroy()
+    {
+        if(NetworkManager.Singleton.IsServer)
+        {
+            NetworkManager.Singleton.OnClientDisconnectCallback -= RemovePlayer;
+        }
+    }
+
+    private void RemovePlayer(ulong clientId)
+    {
+        m_PlayerData.Remove(clientId);
+        Destroy(m_Players[clientId]);
+        m_Players.Remove(clientId);
+        UpdateMovementManagerPlayerIdsServerRpc();
     }
 
     public void sendToCombat(){
@@ -182,5 +206,3 @@ public struct PlayerData : INetworkSerializeByMemcpy
     public string Name;
     public int Score;
 }
-
-//add onclientdisconnect so things can delete their objects.

@@ -20,6 +20,22 @@ namespace StarterAssets
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
 
+		private GameObject _mainCamera;
+
+		private void Awake()
+        {
+            // get a reference to our main camera
+            if (_mainCamera == null)
+            {
+                _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+            }
+        }
+
+		private void Update()
+        {
+			gameObject.GetComponent<MovementManager>().CameraAngleServerRpc(_mainCamera.transform.eulerAngles.y);
+        }
+
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 		public void OnMove(InputValue value)
 		{
