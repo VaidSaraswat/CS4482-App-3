@@ -6,8 +6,10 @@ using Unity.Netcode;
 
 public class MovementManager : NetworkBehaviour
 {
+    public StringContainer playerName = new StringContainer();
     public NetworkVariable<ulong> playerId = new NetworkVariable<ulong>();
     public NetworkList<ulong> playerIds;
+    public int score;
     private ulong[] playerIdList;
 
     [Header("Multiplayer Character Input Values")]
@@ -48,6 +50,32 @@ public class MovementManager : NetworkBehaviour
             GetComponent<StarterAssets.ThirdPersonController>().enabled = true;
             Destroy(GetComponent<MPPersonController>());
         }
+    }
+
+    void Update()
+    {
+        if(playerId.Value == NetworkManager.Singleton.LocalClientId)
+        {
+            score = GetComponent<Inventory>().getPoints();
+            SetScoreServerRpc(score);
+        }
+    }
+
+    [ServerRpc(RequireOwnership=false)]
+	void SetScoreServerRpc(int newScore)
+    {
+        SetScoreClientRpc(newScore, new ClientRpcParams {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = playerIdList
+            }
+        });
+    }
+
+    [ClientRpc]
+    void SetScoreClientRpc(int newScore, ClientRpcParams clientRpcParams)
+    {
+        score = newScore;
     }
 
     [ServerRpc(RequireOwnership=false)]

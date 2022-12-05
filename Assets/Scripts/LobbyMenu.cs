@@ -99,7 +99,7 @@ public class LobbyMenu : NetworkBehaviour
     private void RemovePlayerName(ulong clientId)
     {
         m_PlayerNames.Remove(clientId);
-        var playerNames = m_PlayerNames.Select(x => x.Value).ToArray().Aggregate("", (current, next) => current + "\n" + next);
+        var playerNames = m_PlayerNames.Select(x => x.Value).ToArray().Aggregate("", (current, next) => current + "\n" + next).Substring(1);
         UpdatePlayerNamesClientRpc(playerNames);
     }
 

@@ -27,7 +27,6 @@ public class GameManager : NetworkBehaviour
     private GameObject canvas;
     private GameObject player;
 
-    private Dictionary<ulong, PlayerData> m_PlayerData = new Dictionary<ulong, PlayerData>();
     private Dictionary<ulong, GameObject> m_Players = new Dictionary<ulong, GameObject>();
 
     void Awake()
@@ -42,15 +41,8 @@ public class GameManager : NetworkBehaviour
     {
         camera = GameObject.Find("Main Camera");
         canvas = GameObject.Find("Canvas");
-        
-        m_PlayerData[NetworkManager.Singleton.LocalClientId] = new PlayerData(PlayerPrefs.GetString("PlayerName", "Default User"), 0);
-        SpawnPlayerServerRpc(NetworkManager.Singleton.LocalClientId);
-    }
 
-    void Update()
-    {
-        //m_PlayerData[NetworkManager.Singleton.LocalClientId].Score = ...
-        UpdatePlayerDataServerRpc(NetworkManager.Singleton.LocalClientId, m_PlayerData[NetworkManager.Singleton.LocalClientId]);
+        SpawnPlayerServerRpc(NetworkManager.Singleton.LocalClientId, PlayerPrefs.GetString("PlayerName", "Default User"));
     }
 
     public override void OnDestroy()
@@ -63,7 +55,6 @@ public class GameManager : NetworkBehaviour
 
     private void RemovePlayer(ulong clientId)
     {
-        m_PlayerData.Remove(clientId);
         Destroy(m_Players[clientId]);
         m_Players.Remove(clientId);
         UpdateMovementManagerPlayerIdsServerRpc();
@@ -126,9 +117,10 @@ public class GameManager : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership=false)]
-    public void SpawnPlayerServerRpc(ulong clientId) {
+    public void SpawnPlayerServerRpc(ulong clientId, string name) {
         m_Players[clientId] = Instantiate(PlayerPrefab);
         m_Players[clientId].GetComponent<MovementManager>().playerId.Value = clientId;
+        m_Players[clientId].GetComponent<MovementManager>().playerName.Text = name;
         m_Players[clientId].GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
         SetupLocalPlayerClientRpc(new NetworkObjectReference(m_Players[clientId].GetComponent<NetworkObject>()), new ClientRpcParams {
                 Send = new ClientRpcSendParams
@@ -160,21 +152,6 @@ public class GameManager : NetworkBehaviour
         CurrentPlayer.GetComponent<Inventory>().pointDisplay = pointDisplay;
     }
 
-    [ServerRpc(RequireOwnership=false)]
-    public void UpdatePlayerDataServerRpc(ulong clientId, PlayerData data)
-    {
-        UpdatePlayerDataClientRpc(clientId, data);
-    }
-
-    [ClientRpc]
-    public void UpdatePlayerDataClientRpc(ulong clientId, PlayerData data)
-    {
-        if(clientId != NetworkManager.Singleton.LocalClientId)
-        {
-            m_PlayerData[clientId] = data;
-        }
-    }
-
     [ServerRpc]
     void UpdateMovementManagerPlayerIdsServerRpc()
     {
@@ -193,16 +170,4 @@ public class GameManager : NetworkBehaviour
     {
         return m_Players.Keys.Where(x => x != playerId).ToArray();
     }
-}
-
-public struct PlayerData : INetworkSerializeByMemcpy
-{
-    public PlayerData(string name, int score)
-    {
-        Name = name;
-        Score = score;
-    }
-
-    public string Name;
-    public int Score;
 }

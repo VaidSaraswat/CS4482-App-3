@@ -1,14 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using Unity.Netcode;
+using TMPro;
 
 public class PauseMenu : NetworkBehaviour
 {
     public string menuScene;
     public GameObject pauseMenu;
+    public GameObject scoreMenu;
+    public TMP_Text scores;
 
     private NetworkVariable<bool> isPausedByAnyPlayer = new NetworkVariable<bool>(false);
     private bool wasPausedByAnyPlayer = false;
@@ -36,6 +41,22 @@ public class PauseMenu : NetworkBehaviour
             Cursor.lockState = isPausedByAnyPlayer.Value ? CursorLockMode.None : CursorLockMode.Locked;
             wasPausedByAnyPlayer = isPausedByAnyPlayer.Value;
         }
+        
+        if(Input.GetKey(KeyCode.Tab) && isPausedByAnyPlayer.Value == false)
+        {
+            if(scoreMenu.activeSelf == false)
+            {
+                scoreMenu.SetActive(true);
+            }
+            MovementManager[] players = GameObject.FindObjectsOfType<MovementManager>();
+            Array.Sort(players, CompareScores);
+            string[] lines = players.Select(i => i.playerName.Text + ": " + i.score.ToString()).ToArray();
+            scores.text = lines.Aggregate("", (current, next) => current + "\n" + next).Substring(1);
+        }
+        else if(scoreMenu.activeSelf)
+        {
+            scoreMenu.SetActive(false);
+        }
     }
 
     public override void OnDestroy()
@@ -45,6 +66,22 @@ public class PauseMenu : NetworkBehaviour
         if(!NetworkManager.Singleton.IsServer)
         {
             NetworkManager.Singleton.OnClientDisconnectCallback -= ServerTerminate;
+        }
+    }
+
+    private static int CompareScores(MovementManager p1, MovementManager p2)
+    {
+        if(p1.score > p2.score)
+        {
+            return -1;
+        }
+        else if(p1.score < p2.score)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
         }
     }
 
