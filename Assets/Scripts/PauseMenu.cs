@@ -15,8 +15,9 @@ public class PauseMenu : NetworkBehaviour
     public GameObject scoreMenu;
     public TMP_Text scores;
 
-    private NetworkVariable<bool> isPausedByAnyPlayer = new NetworkVariable<bool>(false);
+    public NetworkVariable<bool> isPausedByAnyPlayer = new NetworkVariable<bool>(false);
     private bool wasPausedByAnyPlayer = false;
+    public bool updateEnabled = true;
 
     void Start()
     {
@@ -29,34 +30,34 @@ public class PauseMenu : NetworkBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if(updateEnabled)
         {
-            PauseGameServerRpc(!isPausedByAnyPlayer.Value);
-        }
-
-        if(isPausedByAnyPlayer.Value != wasPausedByAnyPlayer)
-        {
-            pauseMenu.SetActive(isPausedByAnyPlayer.Value);
-            Time.timeScale = isPausedByAnyPlayer.Value ? 0f : 1f;
-            Cursor.lockState = isPausedByAnyPlayer.Value ? CursorLockMode.None : CursorLockMode.Locked;
-            wasPausedByAnyPlayer = isPausedByAnyPlayer.Value;
-        }
-        
-        if(Input.GetKey(KeyCode.Tab) && isPausedByAnyPlayer.Value == false)
-        {
-            if(scoreMenu.activeSelf == false)
+            if(Input.GetKeyDown(KeyCode.Escape))
             {
-                scoreMenu.SetActive(true);
+                PauseGameServerRpc(!isPausedByAnyPlayer.Value);
             }
-            MovementManager[] players = GameObject.FindObjectsOfType<MovementManager>();
-            Array.Sort(players, CompareScores);
-            string[] lines = players.Select(i => i.playerName.Text + ": " + i.score.ToString()).ToArray();
-            scores.text = lines.Aggregate("", (current, next) => current + "\n" + next).Substring(1);
-        }
-        else if(scoreMenu.activeSelf)
-        {
-            scoreMenu.SetActive(false);
-        }
+
+            if(isPausedByAnyPlayer.Value != wasPausedByAnyPlayer)
+            {
+                pauseMenu.SetActive(isPausedByAnyPlayer.Value);
+                Time.timeScale = isPausedByAnyPlayer.Value ? 0f : 1f;
+                Cursor.lockState = isPausedByAnyPlayer.Value ? CursorLockMode.None : CursorLockMode.Locked;
+                wasPausedByAnyPlayer = isPausedByAnyPlayer.Value;
+            }
+            
+            if(Input.GetKey(KeyCode.Tab) && isPausedByAnyPlayer.Value == false)
+            {
+                if(scoreMenu.activeSelf == false)
+                {
+                    scoreMenu.SetActive(true);
+                }
+                scores.text = GetScoresText();
+            }
+            else if(scoreMenu.activeSelf)
+            {
+                scoreMenu.SetActive(false);
+            }
+        }   
     }
 
     public override void OnDestroy()
@@ -67,6 +68,14 @@ public class PauseMenu : NetworkBehaviour
         {
             NetworkManager.Singleton.OnClientDisconnectCallback -= ServerTerminate;
         }
+    }
+
+    public string GetScoresText()
+    {
+        MovementManager[] players = GameObject.FindObjectsOfType<MovementManager>();
+        Array.Sort(players, CompareScores);
+        string[] lines = players.Select(i => i.playerName.Text + ": " + i.score.ToString()).ToArray();
+        return lines.Aggregate("", (current, next) => current + "\n" + next).Substring(1);
     }
 
     private static int CompareScores(MovementManager p1, MovementManager p2)

@@ -1,47 +1,64 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
-using TMPro;
 using UnityEngine.SceneManagement;
+using Unity.Netcode;
+using TMPro;
 
-public class Timer : MonoBehaviour
+public class Timer : NetworkBehaviour
 {
+    public GameObject ScoreMenu;
     public TMP_Text timerText;
     public TMP_Text gameOverText;
-    private float timeLeft = 300;
-    private bool timerOn = false;
-    void Start()
+    public TMP_Text scoreText;
+
+    private float timeLeft = 300f;
+    private bool timerOn = true;
+
+    void Update()
     {
-        timerOn = true;
-        gameOverText.gameObject.SetActive(false);
+        if(NetworkManager.Singleton.IsServer && timeLeft > 0 && GetComponent<PauseMenu>().isPausedByAnyPlayer.Value == false)
+        {
+            timeLeft -= Time.deltaTime;
+            UpdateTimeClientRpc(timeLeft);
+        }
+        else if(timeLeft < 0 && timerOn)
+        {
+            timerOn = false;
+            EndGame();
+        }
+
+        UpdateTimer(timeLeft);
     }
 
-
-    // Update is called once per frame
-    async void Update()
+    [ClientRpc]
+    void UpdateTimeClientRpc(float newTimeLeft)
     {
-        if (timerOn)
+        if(!NetworkManager.Singleton.IsServer)
         {
-            if (timeLeft > 0)
-            {
-                timeLeft -= Time.deltaTime;
-                updateTimer(timeLeft);
-            }
-            else
-            {
-                timeLeft = 0;
-                timerOn = false;
-                gameOverText.gameObject.SetActive(true);
-                await Task.Delay(3000);
-                SceneManager.LoadScene("MainMenu");
-
-            }
+            timeLeft = newTimeLeft;
         }
     }
 
+    private async void EndGame()
+    {
+        Destroy(timerText);
+        GetComponent<PauseMenu>().updateEnabled = false;
+        Time.timeScale = 0f;
 
-    void updateTimer(float currentTime)
+        ScoreMenu.SetActive(true);
+        ScoreMenu.gameObject.SetActive(true);
+        gameOverText.text = "Match Results";
+        scoreText.text = GetComponent<PauseMenu>().GetScoresText();
+        
+        await Task.Delay(5000);
+        GetComponent<PauseMenu>().ReturnToMainMenu();
+    }
+
+    void UpdateTimer(float currentTime)
     {
         currentTime += 1;
         float minutes = Mathf.FloorToInt(currentTime / 60);
@@ -50,4 +67,3 @@ public class Timer : MonoBehaviour
 
     }
 }
-
