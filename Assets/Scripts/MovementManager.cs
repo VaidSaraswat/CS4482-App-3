@@ -49,6 +49,7 @@ public class MovementManager : NetworkBehaviour
             GetComponent<PlayerInput>().enabled = true;
             GetComponent<StarterAssets.ThirdPersonController>().enabled = true;
             Destroy(GetComponent<MPPersonController>());
+            InvokeRepeating("SyncPlayerPosition", 5.0f, 5.0f);
         }
     }
 
@@ -59,6 +60,30 @@ public class MovementManager : NetworkBehaviour
             score = GetComponent<Inventory>().getPoints();
             SetScoreServerRpc(score);
         }
+    }
+
+    public void SyncPlayerPosition()
+    {
+        SyncPlayerPositionServerRpc(transform.position);
+    }
+
+    [ServerRpc(RequireOwnership=false)]
+    void SyncPlayerPositionServerRpc(Vector3 newPosition)
+    {
+        SyncPlayerPositionClientRpc(newPosition, new ClientRpcParams {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = playerIdList
+            }
+        });
+    }
+
+    [ClientRpc]
+    void SyncPlayerPositionClientRpc(Vector3 newPosition, ClientRpcParams clientRpcParams)
+    {
+        GetComponent<CharacterController>().enabled = false;
+        transform.position = newPosition;
+        GetComponent<CharacterController>().enabled = true;
     }
 
     [ServerRpc(RequireOwnership=false)]
@@ -163,7 +188,20 @@ public class MovementManager : NetworkBehaviour
         sprint = newSprintState;
     }
 
-    //Change movement speed
+    [ServerRpc(RequireOwnership=false)]
+    public void SetMoveSpeedServerRpc(float newMoveSpeed)
+    {
+        SetMoveSpeedClientRpc(newMoveSpeed, new ClientRpcParams {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = playerIdList
+            }
+        });
+    }
 
-    //Change position
+    [ClientRpc]
+    void SetMoveSpeedClientRpc(float newMoveSpeed, ClientRpcParams clientRpcParams)
+    {
+        GetComponent<MPPersonController>().MoveSpeed = newMoveSpeed;
+    }
 }

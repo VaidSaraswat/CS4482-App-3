@@ -91,15 +91,19 @@ public class Inventory : MonoBehaviour
         }
 
         if(Input.GetKeyDown("b")){
-            GameObject.Find("GameManager").GetComponent<GameManager>().GetPlayer().transform.position = new Vector3(524,2,208);
+            GetComponent<CharacterController>().enabled = false;
+            transform.position = new Vector3(524,2,208);
+            GetComponent<CharacterController>().enabled = true;
+            GetComponent<MovementManager>().SyncPlayerPosition();
         }
 
         if(Input.GetKeyDown("t") && itemUsed.isTelePlaced()){
-            GameObject.Find("GameManager").GetComponent<GameManager>().GetPlayer().transform.position = GameObject.Find("TeleporterDevice(Clone)").transform.position - new Vector3(0,5,0);
+            GetComponent<CharacterController>().enabled = false;
+            transform.position = GameObject.Find("TeleporterDevice(Clone)").transform.position - new Vector3(0,5,0);
+            GetComponent<CharacterController>().enabled = true;
+            GetComponent<MovementManager>().SyncPlayerPosition();
             Destroy(GameObject.Find("TeleporterDevice(Clone)"));
         }
-
-        
     }
 
     public void addItem(string itemName, Sprite icon){

@@ -34,6 +34,7 @@ public class Item : MonoBehaviour
             case "Super Speed":
                 if(superspeedAvailable){
                     player.GetComponent<ThirdPersonController>().MoveSpeed = 50f;
+                    player.GetComponent<MovementManager>().SetMoveSpeedServerRpc(50f);
                     superspeedTime =0f;
                     superspeedAvailable = false;
                     superspeedCooldown = 15f;
@@ -83,6 +84,7 @@ public class Item : MonoBehaviour
 
         if(superspeedTime > 7){
            player.GetComponent<ThirdPersonController>().MoveSpeed = 15f;
+           player.GetComponent<MovementManager>().SetMoveSpeedServerRpc(15f);
         }
         if(!superspeedAvailable){
             superspeedCooldown -= Time.deltaTime;
