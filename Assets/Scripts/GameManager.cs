@@ -21,11 +21,12 @@ public class GameManager : NetworkBehaviour
 
     //Scene Change Variables
     private GameObject[] allObjects;
+    private GameObject[] player;
     private bool [] states;
     private bool [] canvasStates;
     private GameObject camera;
     private GameObject canvas;
-    private GameObject player;
+    
 
     private Dictionary<ulong, GameObject> m_Players = new Dictionary<ulong, GameObject>();
 
@@ -61,9 +62,12 @@ public class GameManager : NetworkBehaviour
     }
 
     public void sendToCombat(){
-        player = GameObject.FindWithTag("Player");
+        player = GameObject.FindGameObjectsWithTag("Player");
         camera.SetActive(false);
-        player.SetActive(false);
+        
+        for(int i =0;i<player.Length;i++){
+            player[i].SetActive(false);
+        }
 
         canvasStates = new bool[canvas.transform.childCount];
         for(int i = 0; i < canvas.transform.childCount; i++){
@@ -99,11 +103,14 @@ public class GameManager : NetworkBehaviour
         {
             canvas.transform.GetChild(i).gameObject.SetActive(canvasStates[i]);
         }
-        player.SetActive(true);
+
+        for(int i =0;i<player.Length;i++){
+            player[i].SetActive(false);
+        }
         camera.SetActive(true); 
 
         if(win){
-            player.GetComponent<Inventory>().addPoints(50);
+            this.GetPlayer().GetComponent<Inventory>().addPoints(50);
         }
     }
 
