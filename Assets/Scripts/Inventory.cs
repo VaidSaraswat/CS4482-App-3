@@ -132,7 +132,7 @@ public class Inventory : MonoBehaviour
         }
 
         if(other.gameObject.layer ==LayerMask.NameToLayer("points")){
-            points+= 5;
+            points+= 10;
             other.gameObject.GetComponent<Collectible>().pickedUp();
             
         }
