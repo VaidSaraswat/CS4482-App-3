@@ -7,6 +7,7 @@ using TMPro;
 public class Challenger : MonoBehaviour
 {
     public TMP_Text challengeText;
+    public int points;
     private bool canChallenge;
     private float cooldown;
     private bool usable;
@@ -49,6 +50,10 @@ public class Challenger : MonoBehaviour
         this.gameObject.transform.localScale = new Vector3(0, 0, 0);
         cooldown = 15f;
         usable = false;
+    }
+
+    public int getPoints(){
+        return points;
     }
 
     

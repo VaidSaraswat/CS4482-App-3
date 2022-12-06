@@ -26,8 +26,9 @@ public class GameManager : NetworkBehaviour
     private bool [] canvasStates;
     private GameObject camera;
     private GameObject canvas;
-    private GameObject challenger;
-    
+
+    //Challenger Variables
+    private GameObject challengerUsed;
     
     private Dictionary<ulong, GameObject> m_Players = new Dictionary<ulong, GameObject>();
 
@@ -67,8 +68,8 @@ public class GameManager : NetworkBehaviour
         UpdateMovementManagerPlayerIdsServerRpc();
     }
 
-    public void sendToCombat(GameObject challengerUsed){
-        challenger = challengerUsed;
+    public void sendToCombat(GameObject challenger){
+        challengerUsed = challenger;
         player = GameObject.FindGameObjectsWithTag("Player");
         camera.SetActive(false);
         
@@ -115,10 +116,10 @@ public class GameManager : NetworkBehaviour
             player[i].SetActive(true);
         }
         camera.SetActive(true); 
-        challenger.GetComponent<Challenger>().startCooldown();
+        challengerUsed.GetComponent<Challenger>().startCooldown();
 
         if(win){
-            this.GetPlayer().GetComponent<Inventory>().addPoints(50);
+            this.GetPlayer().GetComponent<Inventory>().addPoints(challengerUsed.GetComponent<Challenger>().getPoints());
         }
     }
 
@@ -157,7 +158,6 @@ public class GameManager : NetworkBehaviour
         {
             yield return new WaitForSeconds(0.1f);
         }
-        
         currentPlayerRef.TryGet(out NetworkObject currentPlayerNetworkObject);
         CurrentPlayer = currentPlayerNetworkObject.gameObject;
         VirtualCamera.GetComponent<CinemachineVirtualCamera>().Follow = CurrentPlayer.transform.GetChild(0).transform;
@@ -184,5 +184,5 @@ public class GameManager : NetworkBehaviour
     private ulong[] RemovePlayerId(ulong playerId)
     {
         return m_Players.Keys.Where(x => x != playerId).ToArray();
-    }
+    }  
 }
