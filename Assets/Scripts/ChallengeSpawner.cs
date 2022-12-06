@@ -54,20 +54,19 @@ public class ChallengeSpawner : MonoBehaviour
     void Awake()
     {
         challengerPositions = shuffle(challengerPositions);
-        for(int i=1; i<=20;i++){
-            Debug.Log(challengerPositions[i]);
+        for(int i=1; i<=35; i++){
             challengers.transform.GetChild(i).transform.localPosition = challengerPositions[i];
-            if(i <= 10){
-                challengers.transform.GetChild(i).GetComponent<Challenger>().points = 50;
-            }
-            else if(i <= 16){
+            if(i <= 6){
                 challengers.transform.GetChild(i).GetComponent<Challenger>().points = 75;
             }
-            else if(i <= 19){
-                challengers.transform.GetChild(i).GetComponent<Challenger>().points = 125;
+            else if(i <= 18){
+                challengers.transform.GetChild(i).GetComponent<Challenger>().points = 150;
+            }
+            else if(i <= 30){
+                challengers.transform.GetChild(i).GetComponent<Challenger>().points = 250;
             }
             else{
-                challengers.transform.GetChild(i).GetComponent<Challenger>().points = 200;
+                challengers.transform.GetChild(i).GetComponent<Challenger>().points = 500;
             }
         }
     }

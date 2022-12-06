@@ -75,7 +75,7 @@ public class Shop : MonoBehaviour
     public void selectPassive(){
         item = "Passive Income";
         description = "When purchased, the user will begin to gain 3 points every 2 seconds for the remainder of the game";
-        cost = 200;
+        cost = 300;
         displayDescription.SetText(description);
         displayCost.SetText(string.Format("{0}", cost));
         displayItem.SetText(item);
