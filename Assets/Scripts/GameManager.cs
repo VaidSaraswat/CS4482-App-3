@@ -110,7 +110,7 @@ public class GameManager : NetworkBehaviour
         }
 
         for(int i =0;i<player.Length;i++){
-            player[i].SetActive(false);
+            player[i].SetActive(true);
         }
         camera.SetActive(true); 
 
