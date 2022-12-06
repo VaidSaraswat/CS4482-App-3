@@ -39,7 +39,7 @@ public class Shop : MonoBehaviour
     public void selectTeleporter(){
         item = "Teleporter";
         description = "When this item is used, the player will place this item at their current location. The player can then teleport to the location where the item was dropped by using pressing 'T'.(30 second cooldown after being placed)";
-        cost = 75;
+        cost = 150;
         displayDescription.SetText(description);
         displayCost.SetText(string.Format("{0}", cost));
         displayItem.SetText(item);
@@ -51,7 +51,7 @@ public class Shop : MonoBehaviour
     public void selectSuperSpeed(){
         item = "Super Speed";
         description = "Grants the user greatly increased movement speed for 7 seconds (15 second cooldown)";
-        cost = 50;
+        cost = 75;
         displayDescription.SetText(description);
         displayCost.SetText(string.Format("{0}", cost));
         displayItem.SetText(item);
@@ -75,7 +75,7 @@ public class Shop : MonoBehaviour
     public void selectPassive(){
         item = "Passive Income";
         description = "When purchased, the user will begin to gain 3 points every 2 seconds for the remainder of the game";
-        cost = 5;
+        cost = 200;
         displayDescription.SetText(description);
         displayCost.SetText(string.Format("{0}", cost));
         displayItem.SetText(item);

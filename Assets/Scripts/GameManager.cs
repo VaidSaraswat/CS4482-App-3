@@ -26,8 +26,9 @@ public class GameManager : NetworkBehaviour
     private bool [] canvasStates;
     private GameObject camera;
     private GameObject canvas;
+    private GameObject challenger;
     
-
+    
     private Dictionary<ulong, GameObject> m_Players = new Dictionary<ulong, GameObject>();
 
     void Awake()
@@ -66,7 +67,8 @@ public class GameManager : NetworkBehaviour
         UpdateMovementManagerPlayerIdsServerRpc();
     }
 
-    public void sendToCombat(){
+    public void sendToCombat(GameObject challengerUsed){
+        challenger = challengerUsed;
         player = GameObject.FindGameObjectsWithTag("Player");
         camera.SetActive(false);
         
@@ -113,6 +115,7 @@ public class GameManager : NetworkBehaviour
             player[i].SetActive(true);
         }
         camera.SetActive(true); 
+        challenger.GetComponent<Challenger>().startCooldown();
 
         if(win){
             this.GetPlayer().GetComponent<Inventory>().addPoints(50);

@@ -30,7 +30,7 @@ public class Item : MonoBehaviour
                     minimap.SetActive(true);
                     minimapTime =0f;
                     minimapAvailable = false;
-                    minimapCooldown = 20f;
+                    minimapCooldown = 12f;
                 }
                 break;
             case "Super Speed":

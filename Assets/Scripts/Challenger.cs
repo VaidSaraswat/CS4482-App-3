@@ -8,10 +8,19 @@ public class Challenger : MonoBehaviour
 {
     public TMP_Text challengeText;
     private bool canChallenge;
+    private float cooldown;
+    private bool usable;
 
     void Update()
     {
         triggerCombat();
+        if(!usable){
+            cooldown -= Time.deltaTime;
+        }
+        if(cooldown <= 0){
+            usable= true;
+            this.gameObject.transform.localScale = new Vector3(1, 1, 1);
+        }
     }
 
     void OnTriggerStay(Collider other){
@@ -30,9 +39,16 @@ public class Challenger : MonoBehaviour
 
     public void triggerCombat(){
         if(Input.GetKeyDown("c") && canChallenge){
-            GameObject.Find("GameManager").GetComponent<GameManager>().sendToCombat();
+            challengeText.gameObject.SetActive(false);
+            canChallenge = false;
+            GameObject.Find("GameManager").GetComponent<GameManager>().sendToCombat(this.gameObject);
         }
+    }
 
+    public void startCooldown(){
+        this.gameObject.transform.localScale = new Vector3(0, 0, 0);
+        cooldown = 15f;
+        usable = false;
     }
 
     
