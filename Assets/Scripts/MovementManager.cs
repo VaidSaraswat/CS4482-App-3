@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Netcode;
+using TMPro;
 
 public class MovementManager : NetworkBehaviour
 {
@@ -18,6 +19,10 @@ public class MovementManager : NetworkBehaviour
 	public bool jump;
 	public bool sprint;
     public float cameraAngle;
+
+    private GameObject player;
+    public Canvas playerCanvas;
+    public TMP_Text playerNameText;
 
     void Awake()
     {
@@ -43,6 +48,8 @@ public class MovementManager : NetworkBehaviour
             Destroy(GetComponent<StarterAssets.ThirdPersonController>());
             Destroy(GetComponent<PlayerInput>());
             Destroy(GetComponent<Inventory>());
+            playerCanvas.worldCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
+            playerNameText.text = playerName.Text;
         }
         else 
         {
@@ -59,6 +66,11 @@ public class MovementManager : NetworkBehaviour
         {
             score = GetComponent<Inventory>().getPoints();
             SetScoreServerRpc(score);
+        }
+        else
+        {
+            Quaternion lookRotation = GameObject.Find("Main Camera").GetComponent<Camera>().transform.rotation;
+            playerCanvas.transform.rotation = lookRotation;
         }
     }
 
