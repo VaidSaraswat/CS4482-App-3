@@ -56,7 +56,7 @@ public class ChallengeSpawner : MonoBehaviour
         challengerPositions = shuffle(challengerPositions);
         for(int i=1; i<=20;i++){
             Debug.Log(challengerPositions[i]);
-            challengers.transform.GetChild(i).transform.position = challengerPositions[i];
+            challengers.transform.GetChild(i).transform.localPosition = challengerPositions[i];
         }
     }
 
