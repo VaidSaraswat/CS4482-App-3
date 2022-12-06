@@ -17,6 +17,7 @@ public class MainMenu : MonoBehaviour
     {
         PlayerPrefs.SetString("PlayerName", hostNameInputField.text.Length == 0 ? "Host" : hostNameInputField.text);
         NetworkManager.Singleton.StartHost();
+        NetworkManager.Singleton.SceneManager.SetClientSynchronizationMode(LoadSceneMode.Single);
         NetworkManager.Singleton.SceneManager.LoadScene(lobbyScene, LoadSceneMode.Single);
     }
 
@@ -25,6 +26,7 @@ public class MainMenu : MonoBehaviour
         PlayerPrefs.SetString("PlayerName", clientNameInputField.text.Length == 0 ? "Default User" : clientNameInputField.text);
         var transport = NetworkManager.Singleton.GetComponent<UnityTransport>().ConnectionData.Address = hostIPAddressInputField.text;
         NetworkManager.Singleton.StartClient();
+        NetworkManager.Singleton.SceneManager.SetClientSynchronizationMode(LoadSceneMode.Single);
         StartCoroutine(waiter());
     }    
 
