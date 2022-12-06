@@ -12,6 +12,15 @@ public class Challenger : MonoBehaviour
     private float cooldown;
     private bool usable;
 
+    public Canvas challengerCanvas;
+    public TMP_Text scoreText;
+
+    void Start()
+    {
+        challengerCanvas.worldCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
+        scoreText.text = points.ToString();
+    }
+
     void Update()
     {
         triggerCombat();

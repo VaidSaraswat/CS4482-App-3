@@ -86,16 +86,16 @@ public class Shop : MonoBehaviour
 
     public void buyItem(){
         if(player.GetComponent<Inventory>().getPoints() >= cost && !player.GetComponent<Inventory>().isFull()){
-        player.GetComponent<Inventory>().addItem(item,displayImage.GetComponent<Image>().sprite );
-        player.GetComponent<Inventory>().removePoints(cost);
-        }
-        displayDescription.SetText("");
-        displayCost.SetText("");
-        displayItem.SetText("");
-        displayImage.GetComponent<Image>().sprite = null;
-        purchaseButton.SetActive(false);
+            player.GetComponent<Inventory>().addItem(item,displayImage.GetComponent<Image>().sprite );
+            player.GetComponent<Inventory>().removePoints(cost);
+            displayDescription.SetText("");
+            displayCost.SetText("");
+            displayItem.SetText("");
+            displayImage.GetComponent<Image>().sprite = null;
+            purchaseButton.SetActive(false);
 
-        GameObject.Find(item).SetActive(false);
+            GameObject.Find(item).SetActive(false);
+        }
     }
 
     
