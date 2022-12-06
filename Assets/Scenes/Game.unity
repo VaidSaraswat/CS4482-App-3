@@ -38534,7 +38534,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   challengeText: {fileID: 1062032484}
-  points: 1000
+  points: 50
 --- !u!65 &1632089813
 BoxCollider:
   m_ObjectHideFlags: 0
