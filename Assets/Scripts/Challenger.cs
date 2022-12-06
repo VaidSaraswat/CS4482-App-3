@@ -57,7 +57,7 @@ public class Challenger : MonoBehaviour
 
     public void startCooldown(){
         this.gameObject.transform.localScale = new Vector3(0, 0, 0);
-        cooldown = 15f;
+        cooldown = 90f;
         usable = false;
     }
 
