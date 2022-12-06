@@ -57,6 +57,18 @@ public class ChallengeSpawner : MonoBehaviour
         for(int i=1; i<=20;i++){
             Debug.Log(challengerPositions[i]);
             challengers.transform.GetChild(i).transform.localPosition = challengerPositions[i];
+            if(i <= 10){
+                challengers.transform.GetChild(i).GetComponent<Challenger>().points = 50;
+            }
+            else if(i <= 16){
+                challengers.transform.GetChild(i).GetComponent<Challenger>().points = 75;
+            }
+            else if(i <= 19){
+                challengers.transform.GetChild(i).GetComponent<Challenger>().points = 125;
+            }
+            else{
+                challengers.transform.GetChild(i).GetComponent<Challenger>().points = 200;
+            }
         }
     }
 
