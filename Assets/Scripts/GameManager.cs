@@ -44,6 +44,11 @@ public class GameManager : NetworkBehaviour
         canvas = GameObject.Find("Canvas");
 
         SpawnPlayerServerRpc(NetworkManager.Singleton.LocalClientId, PlayerPrefs.GetString("PlayerName", "Default User"));
+        if(SceneManager.sceneCount > 1)
+        {
+            NetworkManager.Singleton.Shutdown();
+            SceneManager.LoadScene(0);
+        }
     }
 
     public override void OnDestroy()
