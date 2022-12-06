@@ -15,14 +15,14 @@ public class Challenger : MonoBehaviour
     }
 
     void OnTriggerStay(Collider other){
-        if(other.gameObject.layer == LayerMask.NameToLayer("player")){
+        if(GameObject.Find("GameManager").GetComponent<GameManager>().GetPlayer() == other.gameObject){
             challengeText.gameObject.SetActive(true);
             canChallenge = true;
         }
     }
 
     void OnTriggerExit(Collider other){
-        if(other.gameObject.layer == LayerMask.NameToLayer("player")){
+        if(GameObject.Find("GameManager").GetComponent<GameManager>().GetPlayer() == other.gameObject){
             challengeText.gameObject.SetActive(false);
             canChallenge = false;
         }

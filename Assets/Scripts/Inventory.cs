@@ -49,23 +49,27 @@ public class Inventory : MonoBehaviour
         pointDisplay.SetText(string.Format("{0}", points));
         
         if(Input.GetKeyDown("1") && !slot[0].GetComponent<Slot>().isEmpty()){
-            
-            itemUsed.useItem(slot[0].GetComponent<Slot>().getItem());
+            if(slot[0].GetComponent<Slot>().getItem() != "Passive Income"){
+                itemUsed.useItem(slot[0].GetComponent<Slot>().getItem());
+            }
         }
         
         if(Input.GetKeyDown("2") && !slot[1].GetComponent<Slot>().isEmpty()){
-            
-            itemUsed.useItem(slot[1].GetComponent<Slot>().getItem());
+            if(slot[1].GetComponent<Slot>().getItem() != "Passive Income"){
+                itemUsed.useItem(slot[1].GetComponent<Slot>().getItem());
+            }
         }
 
         if(Input.GetKeyDown("3") && !slot[2].GetComponent<Slot>().isEmpty()){
-            
-            itemUsed.useItem(slot[2].GetComponent<Slot>().getItem());
+            if(slot[2].GetComponent<Slot>().getItem() != "Passive Income"){
+                itemUsed.useItem(slot[2].GetComponent<Slot>().getItem());
+            }
         }
 
         if(Input.GetKeyDown("4") && !slot[3].GetComponent<Slot>().isEmpty()){
-            
-            itemUsed.useItem(slot[3].GetComponent<Slot>().getItem());
+            if(slot[3].GetComponent<Slot>().getItem() != "Passive Income"){
+                itemUsed.useItem(slot[3].GetComponent<Slot>().getItem());
+            }
         }
 
         if(Input.GetKeyDown("p") && canOpen){
@@ -113,6 +117,9 @@ public class Inventory : MonoBehaviour
                 temp.setItem(itemName);
                 temp.setEmpty(false);
                 temp.setIcon(icon);
+                if(itemName == "Passive Income"){
+                    itemUsed.useItem(itemName); 
+                }
                 return;
             }
         }

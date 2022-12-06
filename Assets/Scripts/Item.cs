@@ -18,6 +18,8 @@ public class Item : MonoBehaviour
     private float teleporterCooldown;
     private bool teleporterAvailable;
     private bool teleporterPlaced;
+    private bool hasPassive;
+    private float passiveTimer;
 
 
     public void useItem(string itemUsed)
@@ -51,6 +53,10 @@ public class Item : MonoBehaviour
                     teleporterPlaced = true;
                 }
                 break;
+            case "Passive Income":
+                hasPassive = true;
+                passiveTimer = 0f;
+                break;
         }
     
     }
@@ -61,6 +67,7 @@ public class Item : MonoBehaviour
         superspeedAvailable = true;
         teleporterAvailable = true;
         teleporterPlaced = false;
+        hasPassive = false;
     }
 
     void Update(){
@@ -68,9 +75,16 @@ public class Item : MonoBehaviour
         {
             player = GameObject.Find("GameManager").GetComponent<GameManager>().GetPlayer();
         }
-
         minimapTime += Time.deltaTime;
         superspeedTime += Time.deltaTime;
+
+        if(hasPassive){
+            passiveTimer += Time.deltaTime;
+            if(passiveTimer >=2){
+                player.GetComponent<Inventory>().addPoints(3);
+                passiveTimer =0f;
+            }
+        }
 
         if(minimapTime > 7){
             minimap.SetActive(false);

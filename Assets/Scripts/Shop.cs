@@ -16,6 +16,7 @@ public class Shop : MonoBehaviour
     public TMP_Text displayPoints;
     public GameObject displayImage;
     public GameObject shop;
+    public GameObject purchaseButton;
     private GameObject player;
     
     void Start()
@@ -42,8 +43,9 @@ public class Shop : MonoBehaviour
         displayDescription.SetText(description);
         displayCost.SetText(string.Format("{0}", cost));
         displayItem.SetText(item);
-        GameObject image = GameObject.Find("Teleporter").transform.GetChild(0).gameObject;
+        GameObject image = GameObject.Find(item).transform.GetChild(0).gameObject;
         displayImage.GetComponent<Image>().sprite = image.GetComponent<Image>().sprite;
+        purchaseButton.SetActive(true);
     }
 
     public void selectSuperSpeed(){
@@ -53,8 +55,9 @@ public class Shop : MonoBehaviour
         displayDescription.SetText(description);
         displayCost.SetText(string.Format("{0}", cost));
         displayItem.SetText(item);
-        GameObject image = GameObject.Find("SuperSpeed").transform.GetChild(0).gameObject;
+        GameObject image = GameObject.Find(item).transform.GetChild(0).gameObject;
         displayImage.GetComponent<Image>().sprite = image.GetComponent<Image>().sprite;
+        purchaseButton.SetActive(true);
     }
 
     public void selectEye(){
@@ -64,8 +67,21 @@ public class Shop : MonoBehaviour
         displayDescription.SetText(description);
         displayCost.SetText(string.Format("{0}", cost));
         displayItem.SetText(item);
-        GameObject image = GameObject.Find("Eye").transform.GetChild(0).gameObject;
+        GameObject image = GameObject.Find(item).transform.GetChild(0).gameObject;
         displayImage.GetComponent<Image>().sprite = image.GetComponent<Image>().sprite;
+        purchaseButton.SetActive(true);
+    }
+
+    public void selectPassive(){
+        item = "Passive Income";
+        description = "When purchased, the user will begin to gain 3 points every 2 seconds for the remainder of the game";
+        cost = 5;
+        displayDescription.SetText(description);
+        displayCost.SetText(string.Format("{0}", cost));
+        displayItem.SetText(item);
+        GameObject image = GameObject.Find(item).transform.GetChild(0).gameObject;
+        displayImage.GetComponent<Image>().sprite = image.GetComponent<Image>().sprite;
+        purchaseButton.SetActive(true);
     }
 
     public void buyItem(){
@@ -73,6 +89,13 @@ public class Shop : MonoBehaviour
         player.GetComponent<Inventory>().addItem(item,displayImage.GetComponent<Image>().sprite );
         player.GetComponent<Inventory>().removePoints(cost);
         }
+        displayDescription.SetText("");
+        displayCost.SetText("");
+        displayItem.SetText("");
+        displayImage.GetComponent<Image>().sprite = null;
+        purchaseButton.SetActive(false);
+
+        GameObject.Find(item).SetActive(false);
     }
 
     
